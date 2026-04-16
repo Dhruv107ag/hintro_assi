@@ -3,19 +3,17 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 const BoardContext = createContext(null);
 
 export const BoardProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
-  const [activities, setActivities] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem('aura_tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+  const [activities, setActivities] = useState(() => {
+    const savedActivities = localStorage.getItem('aura_activities');
+    return savedActivities ? JSON.parse(savedActivities) : [];
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPriority, setFilterPriority] = useState('all');
   const [sortBy, setSortBy] = useState('dueDate'); // 'dueDate' or 'createdAt'
-
-  // Load from local storage
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('aura_tasks');
-    const savedActivities = localStorage.getItem('aura_activities');
-    if (savedTasks) setTasks(JSON.parse(savedTasks));
-    if (savedActivities) setActivities(JSON.parse(savedActivities));
-  }, []);
 
   // Sync to local storage
   useEffect(() => {
@@ -39,7 +37,7 @@ export const BoardProvider = ({ children }) => {
       ...taskData,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
-      status: 'Todo'
+      status: taskData.status || 'Todo'
     };
     setTasks(prev => [...prev, newTask]);
     logActivity('created', newTask);
@@ -89,6 +87,7 @@ export const BoardProvider = ({ children }) => {
     )
     .sort((a, b) => {
       if (sortBy === 'dueDate') {
+        if (!a.dueDate && !b.dueDate) return 0;
         if (!a.dueDate) return 1;
         if (!b.dueDate) return -1;
         return new Date(a.dueDate) - new Date(b.dueDate);

@@ -26,8 +26,6 @@ const Navbar = () => {
           
           <div className="hidden md:flex items-center space-x-6 text-[11px] font-bold uppercase tracking-widest text-ink/30">
             <a href="#" className="text-ink hover:text-ink transition-colors">Board</a>
-            <a href="#" className="hover:text-ink transition-colors">Strategy</a>
-            <a href="#" className="hover:text-ink transition-colors">Metrics</a>
           </div>
         </div>
         
@@ -52,7 +50,7 @@ const Navbar = () => {
 };
 
 const BoardView = () => {
-  const { addTask, updateTask } = useBoard();
+  const { tasks, addTask, updateTask, moveTask } = useBoard();
   const [modalState, setModalState] = useState({ isOpen: false, task: null, initialStatus: 'Todo' });
 
   const handleAddTask = (status) => {
@@ -69,6 +67,11 @@ const BoardView = () => {
     } else {
       addTask(taskData);
     }
+  };
+
+  const handleMoveTask = (taskId, newStatus) => {
+    moveTask(taskId, newStatus);
+    setModalState({ ...modalState, isOpen: false });
   };
 
   return (
@@ -89,8 +92,10 @@ const BoardView = () => {
         isOpen={modalState.isOpen}
         task={modalState.task}
         initialStatus={modalState.initialStatus}
+        tasks={tasks}
         onClose={() => setModalState({ ...modalState, isOpen: false })}
         onSave={handleSaveTask}
+        onMove={handleMoveTask}
       />
     </div>
   );

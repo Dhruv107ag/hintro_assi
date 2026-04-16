@@ -7,11 +7,24 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for remembered session
-    const savedUser = localStorage.getItem('aura_session');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    const localSession = localStorage.getItem('aura_session');
+    const sessionData = sessionStorage.getItem('aura_session');
+
+    if (localSession) {
+      try {
+        const parsedData = JSON.parse(localSession);
+        if (parsedData.expiry && Date.now() > parsedData.expiry) {
+          localStorage.removeItem('aura_session');
+        } else {
+          setUser(parsedData);
+        }
+      } catch (e) {
+        localStorage.removeItem('aura_session');
+      }
+    } else if (sessionData) {
+      setUser(JSON.parse(sessionData));
     }
+
     setLoading(false);
   }, []);
 
@@ -21,10 +34,15 @@ export const AuthProvider = ({ children }) => {
       setTimeout(() => {
         if (email === 'intern@demo.com' && password === 'intern123') {
           const userData = { email, lastLogin: new Date().toISOString() };
-          setUser(userData);
+          
           if (rememberMe) {
+            userData.expiry = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
             localStorage.setItem('aura_session', JSON.stringify(userData));
+          } else {
+            sessionStorage.setItem('aura_session', JSON.stringify(userData));
           }
+          
+          setUser(userData);
           resolve(userData);
         } else {
           reject(new Error('Invalid email or password. Please try again.'));
@@ -36,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('aura_session');
+    sessionStorage.removeItem('aura_session');
   };
 
   return (

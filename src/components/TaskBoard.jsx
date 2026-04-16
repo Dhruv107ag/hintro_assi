@@ -50,7 +50,13 @@ const TaskBoard = ({ onAddTask, onEditTask }) => {
   };
 
   const handleDragOver = (event) => {
+    // Left empty specifically to prevent React unmounting the node mid-drag 
+  };
+
+  const handleDragEnd = (event) => {
     const { active, over } = event;
+    setActiveTask(null);
+
     if (!over) return;
 
     const activeId = active.id;
@@ -67,10 +73,6 @@ const TaskBoard = ({ onAddTask, onEditTask }) => {
     if (newStatus && activeTask.status !== newStatus) {
       moveTask(activeId, newStatus);
     }
-  };
-
-  const handleDragEnd = (event) => {
-    setActiveTask(null);
   };
 
   return (
