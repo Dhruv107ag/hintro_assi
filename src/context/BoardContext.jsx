@@ -13,7 +13,7 @@ export const BoardProvider = ({ children }) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPriority, setFilterPriority] = useState('all');
-  const [sortBy, setSortBy] = useState('dueDate'); // 'dueDate' or 'createdAt'
+  const [sortBy, setSortBy] = useState('dueDateAsc'); // 'dueDateAsc', 'dueDateDesc', 'createdAtDesc'
 
   // Sync to local storage
   useEffect(() => {
@@ -86,11 +86,17 @@ export const BoardProvider = ({ children }) => {
       (filterPriority === 'all' || task.priority === filterPriority)
     )
     .sort((a, b) => {
-      if (sortBy === 'dueDate') {
+      if (sortBy === 'dueDateAsc') {
         if (!a.dueDate && !b.dueDate) return 0;
         if (!a.dueDate) return 1;
         if (!b.dueDate) return -1;
         return new Date(a.dueDate) - new Date(b.dueDate);
+      }
+      if (sortBy === 'dueDateDesc') {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return new Date(b.dueDate) - new Date(a.dueDate);
       }
       return new Date(b.createdAt) - new Date(a.createdAt);
     });

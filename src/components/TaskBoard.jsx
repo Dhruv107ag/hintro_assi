@@ -130,6 +130,19 @@ const TaskBoard = ({ onAddTask, onEditTask }) => {
             </select>
           </div>
 
+          <div className="flex items-center space-x-2 bg-ink/[0.03] px-3 py-2 rounded-lg border border-transparent">
+            <ArrowUpDown className="w-3.5 h-3.5 text-ink/30" />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-transparent text-[11px] font-bold uppercase tracking-wider outline-none cursor-pointer text-ink/60 hover:text-ink transition-colors"
+            >
+              <option value="createdAtDesc">Sort: Newest First</option>
+              <option value="dueDateAsc">Sort: Due Date (Earliest)</option>
+              <option value="dueDateDesc">Sort: Due Date (Latest)</option>
+            </select>
+          </div>
+
           <button
             onClick={() => onAddTask()}
             className="btn-ink px-5 py-2 text-xs"
