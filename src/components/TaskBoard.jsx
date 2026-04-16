@@ -50,13 +50,30 @@ const TaskBoard = ({ onAddTask, onEditTask }) => {
   };
 
   const handleDragOver = (event) => {
-    // Left empty specifically to prevent React unmounting the node mid-drag 
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    const activeTask = tasks.find(t => t.id === activeId);
+    if (!activeTask) return;
+
+    const isOverColumn = COLUMNS.includes(overId);
+    const overTask = tasks.find(t => t.id === overId);
+    
+    const newStatus = isOverColumn ? overId : overTask?.status;
+
+    if (newStatus && activeTask.status !== newStatus) {
+      moveTask(activeId, newStatus);
+    }
   };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     setActiveTask(null);
 
+    // Final safety check if dropped extremely fast
     if (!over) return;
 
     const activeId = active.id;
@@ -154,7 +171,7 @@ const TaskBoard = ({ onAddTask, onEditTask }) => {
           <DragOverlay dropAnimation={null}>
             {activeTask ? (
               <div className="dnd-dragoverlay">
-                <TaskCard task={activeTask} />
+                <TaskCard task={activeTask} isOverlay={true} />
               </div>
             ) : null}
           </DragOverlay>

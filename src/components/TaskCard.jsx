@@ -11,7 +11,7 @@ const priorityStyles = {
   High: 'text-rose-700 bg-rose-50',
 };
 
-const TaskCard = ({ task, onEdit, onDelete }) => {
+const TaskCard = ({ task, onEdit, onDelete, isOverlay }) => {
   const {
     attributes,
     listeners,
@@ -19,7 +19,7 @@ const TaskCard = ({ task, onEdit, onDelete }) => {
     transform,
     transition,
     isDragging
-  } = useSortable({ id: task.id });
+  } = useSortable({ id: isOverlay ? `overlay-${task.id}` : task.id });
 
   const cardRef = useRef(null);
 
