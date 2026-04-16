@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #fbfbf9;
+  --color-surface: #f5f5f2;
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #666666;
+  --color-border-warm: #dcdcd0;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+:root {
+  --color-canvas: #fbfbf9;
+  --color-surface: #f5f5f2;
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #666666;
+  --color-border-warm: #dcdcd0;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: block;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-canvas);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05' /%3E%3C/svg%3E");
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+}
+
+/* Custom UI Components */
+.paper-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-warm);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 0 0 rgba(26,26,26,0.03);
+  transition: all 0.3s ease;
+}
+
+.paper-card:hover {
+  box-shadow: 0 8px 0 0 rgba(26,26,26,0.05);
+  transform: translateY(-0.25rem);
+}
+
+.ink-input {
+  background-color: white;
+  border: 1px solid var(--color-border-warm);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+  color: var(--color-ink);
+}
+
+.ink-input:focus {
+  border-color: rgba(26, 26, 26, 0.3);
+}
+
+.btn-ink {
+  @apply bg-ink text-canvas px-6 py-2.5 rounded-lg font-semibold hover:bg-ink/90 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2;
+}
+
+.btn-ghost {
+  @apply text-ink/70 hover:text-ink hover:bg-ink/5 px-4 py-2 rounded-lg transition-all font-semibold flex items-center gap-2;
+}
+
+/* Editorial Typography */
+.heading-editorial {
+  @apply text-ink font-bold tracking-tight;
+}
+
+.text-meta {
+  @apply text-[10px] font-bold uppercase tracking-widest text-ink/60;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 26, 26, 0.1);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 26, 26, 0.2);
+}
+
+/* DND Kit Overhaul */
+.dnd-dragoverlay {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-warm);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 0 0 rgba(26,26,26,0.05);
+  transform: scale(1.05) rotate(1deg);
+  opacity: 0.9;
+  z-index: 100;
+  cursor: grabbing;
+  display: block !important;
+}
+
+/* Bulletproof text/bg colors to override Tailwind missed bindings */
+.text-ink { color: #1a1a1a !important; }
+.text-ink\/80 { color: rgba(26, 26, 26, 0.8) !important; }
+.text-ink\/60 { color: rgba(26, 26, 26, 0.6) !important; }
+.text-ink\/40 { color: rgba(26, 26, 26, 0.4) !important; }
+.text-canvas { color: #fbfbf9 !important; }
+
+.bg-ink { background-color: #1a1a1a !important; }
+.bg-canvas { background-color: #fbfbf9 !important; }
+.bg-surface { background-color: #f5f5f2 !important; }
+
+.border-ink { border-color: #1a1a1a !important; }
+.border-ink\/40 { border-color: rgba(26, 26, 26, 0.4) !important; }
+.border-ink\/20 { border-color: rgba(26, 26, 26, 0.2) !important; }
